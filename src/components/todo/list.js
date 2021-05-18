@@ -9,17 +9,13 @@ function TodoList(props) {
   const getToDoItemStatusBadge = (item) => {
     const variant = item.complete ? "danger" : "success";
     const text = item.complete ? "complete" : "pending";
-    return (
-      <Badge style={{ width: "30%" }} variant={variant}>
-        {text}
-      </Badge>
-    );
+    return <Badge variant={variant}>{text}</Badge>;
   };
   return (
     <ul>
       {props.list.map((item) => (
-        <li  key={item._id}>
-          <Card>
+        <li style={{ marginTop: "16px" }} key={item._id}>
+          <Card style={{ width: "100%" }}>
             <Card.Header as="h5">
               {getToDoItemStatusBadge(item)} {item.assignee}
             </Card.Header>
