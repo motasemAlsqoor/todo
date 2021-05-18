@@ -21,7 +21,9 @@ html {
     padding: 1em;
   }
 }
-
+.itemStatus {
+  width: 20%;
+}
 .todo {
   display: flex;
   flex-direction: row;
@@ -52,30 +54,9 @@ html {
       flex-direction: row;
       font-size: 1em;
 
-      &.complete-true {
-        span {
-          background: rgb(95, 194, 138);
-          color: green;
-          &:hover {
-            background: seagreen;
-          }
-        }
-      }
+     
 
-      span {
-        background: #e0e0e0;
-        cursor: pointer;
-        &:hover {
-          background: pink;
-        }
-      }
-      span,
-      input {
-        border: 0.5px solid #eee;
-        display: inline-block;
-        padding: 0.2em 0.25em;
-        width: 300px;
-      }
+      
 
       button {
         border: none;
