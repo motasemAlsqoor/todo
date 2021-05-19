@@ -51,11 +51,11 @@ function ToDo() {
       </header>
 
       <section className="todo">
-        <div>
+        <div style={{ width: "25%" }}>
           <TodoForm handleSubmit={addItem} />
         </div>
 
-        <div>
+        <div style={{ maxWidth: "75%", minWidth: "75%" }}>
           <TodoList
             list={list}
             handleComplete={toggleComplete}
