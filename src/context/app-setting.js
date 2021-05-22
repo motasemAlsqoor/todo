@@ -4,7 +4,7 @@ export const SettingContext = React.createContext();
 
 export default function SettingProvider(props) {
   const [completedTodoItemsShowStatus, setCompletedItemShowStatus] =
-    useState(true);
+    useState(false);
   const [numberOfItemsPerScreen, setnumberOfItemsPerScreen] = useState(3);
   const [defaultSortField, setdefaultSortField] = useState("difficulty");
   const state = {

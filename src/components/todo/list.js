@@ -6,10 +6,13 @@ import Badge from "react-bootstrap/Badge";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { SettingContext } from "../../context/app-setting";
+import { LoginContext } from "../../context/auth";
+import ACL from "./acl";
 
 function TodoList(props) {
   const [currentPage, setcurrentPage] = useState(1);
   const context = useContext(SettingContext);
+  const loginContext = useContext(LoginContext);
   const numberOfPage = Math.ceil(
     props.list.length / context.numberOfItemsPerScreen
   );
@@ -19,7 +22,14 @@ function TodoList(props) {
     return (
       <Badge
         style={{ cursor: "pointer" }}
-        onClick={() => props.handleComplete(item._id)}
+        onClick={() => {
+          const canUpdate =
+            loginContext.loggedIn &&
+            loginContext.user.capabilities.includes("update");
+          if (canUpdate) {
+            props.handleComplete(item._id);
+          }
+        }}
         variant={variant}
       >
         {text}
@@ -81,39 +91,45 @@ function TodoList(props) {
 
   return (
     <>
-      <ul>
-        {getCurrentList().map((item) => (
-          <li style={{ marginTop: "16px" }} key={item._id}>
-            <Card style={{ width: "100%" }}>
-              <Card.Header as="h5">
-                {getToDoItemStatusBadge(item)} {item.assignee}
-              </Card.Header>
-              <Card.Body>
-                <Card.Text>
-                  <span>{item.text}</span>
-                </Card.Text>
-                <Button
-                  variant="danger"
-                  onClick={() => props.handleDeleteItem(item._id)}
-                >
-                  Delete
-                </Button>
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    props.handleItemIdToEdit(item._id);
-                    props.handleShow();
-                  }}
-                >
-                  Edit
-                </Button>
-              </Card.Body>
-              <Card.Footer>difficulty{" : " + item.difficulty}</Card.Footer>
-            </Card>
-          </li>
-        ))}
-      </ul>
-      {getPagesNavigationButtons().map((item) => item)}
+      <ACL capability="read">
+        <ul>
+          {getCurrentList().map((item) => (
+            <li style={{ marginTop: "16px" }} key={item._id}>
+              <Card style={{ width: "100%" }}>
+                <Card.Header as="h5">
+                  {getToDoItemStatusBadge(item)} {item.assignee}
+                </Card.Header>
+                <Card.Body>
+                  <Card.Text>
+                    <span>{item.text}</span>
+                  </Card.Text>
+                  <ACL capability="delete">
+                    <Button
+                      variant="danger"
+                      onClick={() => props.handleDeleteItem(item._id)}
+                    >
+                      Delete
+                    </Button>
+                  </ACL>
+                  <ACL capability="update">
+                    <Button
+                      variant="primary"
+                      onClick={() => {
+                        props.handleItemIdToEdit(item._id);
+                        props.handleShow();
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </ACL>
+                </Card.Body>
+                <Card.Footer>difficulty{" : " + item.difficulty}</Card.Footer>
+              </Card>
+            </li>
+          ))}
+        </ul>
+        {getPagesNavigationButtons().map((item) => item)}
+      </ACL>
     </>
   );
 }
